@@ -1,0 +1,3 @@
+server:
+  port: 8100
+  contextPath: /happyhouse_final

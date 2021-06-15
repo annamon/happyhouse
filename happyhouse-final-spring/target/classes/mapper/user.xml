@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.dao.UserMapper">
+ 
+ 
+
+ 	<!-- user 파트 -->
+	<!-- 	   table user
+		`id` varchar(20) NOT NULL,
+		`name` varchar(40) NOT NULL,
+		`password` varchar(100) NOT NULL,
+		`email` varchar(40) NOT NULL,
+		`number` varchar(13) NOT NULL,
+		`job` varchar(10) NOT NULL,
+		`passhint` varchar(100) NOT NULL,
+		`joindate` timestamp DEFAULT CURRENT_TIMESTAMP -->
+
+	<!-- 회원가입 : 아이디 중복체크 -->
+	<select id="checkID" parameterType="java.lang.String"
+	resultType="com.ssafy.happyhouse.dto.UserDto">
+		select *
+		from user
+		where id = #{id}
+	</select>
+
+ 	<!-- 회원가입 -->
+ 	<insert id="joinUser" parameterType="com.ssafy.happyhouse.dto.UserDto">
+ 		insert into user(id, name, password, email, number, job, passhint, joindate)
+ 		values(#{id}, #{name}, #{password}, #{email}, #{number}, #{job}, #{passhint}, now())
+ 	</insert>
+ 	
+ 	<!-- 회원수정 -->
+ 	<update id="updateUser" parameterType="com.ssafy.happyhouse.dto.UserDto">
+ 		update user
+ 		set 
+ 			name = #{name}, 
+ 			password = #{password},
+ 			email = #{email},
+ 			number = #{number},
+ 			job = #{job},
+ 			passhint = #{passhint}
+ 		where id = #{id}
+ 	</update>
+ 	
+ 	<!-- 회원탈퇴 -->
+ 	<delete id="deleteUser" parameterType="java.lang.String">
+		delete
+		from user
+		where id = #{id}
+ 	</delete>
+ 	
+ 	<!-- 회원정보 -->
+ 	<select id="detailUser" parameterType="java.lang.String"
+ 	resultType="com.ssafy.happyhouse.dto.UserDto">
+ 		select *
+ 		from user
+ 		where id = #{id}
+ 	</select>
+ 	
+ 	<!-- 비밀번호 찾기 -->
+ 	<select id="findPassword" parameterType="com.ssafy.happyhouse.dto.UserDto"
+ 	resultType="java.lang.String">
+ 		select password
+ 		from user
+ 		where id = #{id} and passhint = #{passhint}
+ 	</select>
+ 	
+ 	<!-- 로그인 -->
+ 	<select id="login" parameterType="com.ssafy.happyhouse.dto.UserDto"
+ 	resultType="com.ssafy.happyhouse.dto.UserDto">
+ 		select *
+ 		from user
+ 		where id = #{id} and password = #{password}
+ 	</select>
+ 	
+ 	
+ 	
+ 	<!-- admin 파트 -->
+ 	<!-- 전체 회원 목록 -->
+ 	<select id="allUser" resultType="com.ssafy.happyhouse.dto.UserDto">
+ 		select *
+ 		from user
+ 		where id != 'ssafy'
+ 		order by id
+ 	</select>
+ 	
+ 	<!-- 아이디로 회원 찾기 -->
+ 	<select id="findByID" parameterType="java.lang.String"
+ 	resultType="com.ssafy.happyhouse.dto.UserDto">
+ 		select *
+ 		from user
+ 		where id like concat('%',#{id},'%')
+ 		order by id
+ 	
+ 	</select>
+  
+ 
+</mapper>

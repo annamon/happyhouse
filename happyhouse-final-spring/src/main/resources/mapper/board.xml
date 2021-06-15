@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.dao.BoardMapper">
+ 
+ 
+
+ 	<!-- board 파트 -->
+
+	<!-- 	   table board
+		`id` varchar(20) NOT NULL,
+		`no` bigint(10) NOT NULL AUTO_INCREMENT,
+		`title` varchar(40) NOT NULL,
+		`content` varchar(200) NOT NULL,
+		`regtime` timestamp DEFAULT CURRENT_TIMESTAMP  -->
+
+
+ 	<!-- 게시글 등록 -->
+ 	<insert id="writeBoard" parameterType="com.ssafy.happyhouse.dto.BoardDto">
+ 		insert into board(id, title, content, regtime)
+ 		values(#{id}, #{title}, #{content}, now())
+ 	</insert>
+ 	
+ 	<!-- 게시글 수정 -->
+ 	<update id="updateBoard" parameterType="com.ssafy.happyhouse.dto.BoardDto">
+ 		update board
+ 		set 
+ 			title = #{title}, 
+ 			content = #{content}
+ 		where no = #{no}
+ 	</update>
+ 	
+ 	<!-- 게시글 삭제 -->
+ 	<delete id="deleteBoard" parameterType="java.lang.Integer">
+		delete
+		from board
+		where no = #{no}
+ 	</delete>
+ 	
+ 	<!-- 공지사항 목록 -->
+ 	<select id="notice" resultType="com.ssafy.happyhouse.dto.BoardDto">
+ 		select *
+ 		from board
+ 		where id = 'ssafy'
+ 		order by regtime
+ 	</select>
+ 	
+ 	<!-- 자유게시판 목록 -->
+ 	<select id="openBoard" resultType="com.ssafy.happyhouse.dto.BoardDto">
+ 		select *
+ 		from board
+ 		where id != 'ssafy'
+ 		order by regtime
+ 	</select>
+ 	
+ 	
+ 	<!-- 게시글 상세보기 -->
+ 	<select id="detailBoard" parameterType="java.lang.Integer"
+ 	resultType="com.ssafy.happyhouse.dto.BoardDto">
+ 		select *
+ 		from board
+ 		where no = #{no}
+ 	</select>
+ 
+</mapper>

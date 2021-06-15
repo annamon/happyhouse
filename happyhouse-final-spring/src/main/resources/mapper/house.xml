@@ -1,0 +1,187 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.ssafy.happyhouse.dao.HouseMapper">
+ 
+ 
+
+ 	<!-- houseSearch 파트 -->
+
+	<!-- 	   table board
+		houseSearch : String City, String Gugun, String Dong, String word
+		
+		String no;
+		String lat;
+		String lng;
+		String dong;
+		String aptName;
+		String dealAmount;
+		String area;
+		String buildYear;		-->
+
+
+ 	<!-- 전체 집 목록 -->
+ 	<select id="findAll" resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 검색어 -->
+ 	<select id="findByName" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.AptName = #{word}
+				and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 시 -->
+ 	<select id="findByCity" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city}
+		)
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 시 검색어 -->
+ 	<select id="findByCityName" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city}
+		)
+		and hd.AptName like concat('%',#{word},'%')
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 시 구 -->
+ 	<select id="findByGugun" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city} and dongcode.gugun = #{gugun}
+		)
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 시 구 검색어 -->
+ 	<select id="findByGugunName" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city} and dongcode.gugun = #{gugun}
+		)
+		and hd.AptName like concat('%',#{word},'%')
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.dong, hd.AptName, hd.dealAmount
+ 	</select>
+ 	
+ 	<!-- 시 구 동 -->
+ 	<select id="findByDong" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city} and dongcode.gugun = #{gugun}
+        		and dongcode.dong = #{dong}
+		)
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.AptName desc, hd.dealAmount desc
+ 	</select>
+ 	
+ 	<!-- 시 구 동 검색어 -->
+ 	<select id="findByDongName" parameterType="com.ssafy.happyhouse.dto.HouseSearchDto"
+ 	resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select hd.no, hi.lat, hi.lng, hd.dong, hd.AptName, hd.dealAmount, hd.area, hd.buildYear
+		from houseinfo hi, housedeal hd
+		where hi.dong in ( select dong
+			from dongcode
+        	where dongcode.city = #{city} and dongcode.gugun = #{gugun}
+        		and dongcode.dong = #{dong}
+		)
+		and hd.AptName like concat('%',#{word},'%')
+		and hi.dong = hd.dong and hi.AptName = hd.AptName and hi.code = hd.code
+		order by hd.AptName desc, hd.dealAmount desc
+ 	</select>
+ 	
+ 	<!-- 시 목록 -->
+ 	<select id="cityList" resultType="java.lang.String">
+ 		select sido_name
+ 		from sidocode
+ 		order by sido_code
+ 	</select>
+ 	
+ 	<!-- 시 선택에 따른 구 목록 -->
+ 	<select id="gugunList" parameterType="java.lang.String" resultType="java.lang.String">
+ 		select distinct gugun
+ 		from baseaddress
+ 		where city = #{city}
+ 		order by gugun
+ 	</select>
+ 	
+ 	<!-- 구 선택에 따른 동 목록 -->
+ 	<select id="dongList" parameterType="java.lang.String" resultType="java.lang.String">
+ 		select distinct dong
+ 		from baseaddress
+ 		where gugun = #{gugun}
+ 		order by dong
+ 	</select>
+ 	
+ 	<!-- 학군 리스트 -->
+ 	<select id="schoolList" parameterType="java.lang.String" resultType="java.lang.String">
+ 		select name
+		from school
+		where dong in (
+			select dong
+		    from housedeal
+		    where no = #{no}
+		)
+		order by dong, school desc, name;
+ 	</select>
+ 	
+ 	
+ 	<!-- 찜목록 -->
+ 	<!-- 찜목록에 추가하기 -->
+ 	<insert id="insertLike" parameterType="com.ssafy.happyhouse.dto.LikeDto">
+ 		insert into likelist(id, no)
+ 		values(#{id}, #{no})
+ 	</insert>
+ 	
+ 	<!-- 찜목록에서 삭제하기 -->
+ 	<delete id="deleteLike" parameterType="com.ssafy.happyhouse.dto.LikeDto">
+ 		delete
+ 		from likelist
+ 		where id=#{id} and no=#{no}
+ 	</delete>
+ 	
+ 	<!-- 찜목록 전체보기 -->
+ 	<select id="showLike" parameterType="java.lang.String" resultType="com.ssafy.happyhouse.dto.HouseDto">
+ 		select no, dong, AptName, dealAmount, area, buildYear
+		from housedeal
+		where no in (
+			select no
+		    from likelist
+		    where id = #{id}
+		) 
+		order by dong, AptName, dealAmount
+ 	</select>
+ 	
+</mapper>
